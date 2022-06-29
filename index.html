@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JS Website with API</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://kit.fontawesome.com/87928fd666.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header>
+      <h2>IMDB's Top 250 Movies</h2>
+    </header>
+
+    <section class="filter-container">
+      <button class="favs-filter">Favorites</button>
+      <div class="sort-container">
+        <p>Sort</p>
+        <div class="sort-btn-container">
+          <button class="sort-btn" id="AZ">A-Z</button> 
+          <button class="sort-btn" id="ZA">Z-A</button> 
+        </div>
+      </div>
+    </section>
+
+    <ul class="movie-display" id="movie-display">
+      <!-- Here Be Javascript -->
+    </ul>
+
+    <div class="show-more">
+      <button id="show-more">Show More</button>
+    </div>
+    
+    <script src="./main.js" async defer></script>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+header h2 {
+  text-align: center;
+}
+
+.filter-container {
+  display: flex;
+  flex: space-between;
+  width: 95%;
+  margin: auto;
+  align-content: center;
+}
+
+.favs-filter,
+.sort-btn {
+  padding: 0 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  letter-spacing: 1.63px;
+  font-weight: 700;
+  justify-content: center;
+  margin: auto;
+}
+
+.favs-filter:hover,
+.sort-btn {
+  cursor: pointer;
+}
+
+.favs-filter.active,
+.sort-btn.active {
+  color: red;
+}
+
+.sort-container {
+  margin: auto;
+  text-align: center;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  flex: space-around;
+}
+
+.sort-container p {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  letter-spacing: 1.63px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.movie-display {
+  display: flex;
+  flex-wrap: wrap;
+  width: 800px;
+  margin: auto;
+  padding: 0;
+  justify-content: center;
+}
+
+.movie-display li {
+  flex: 1 1 20%;
+  list-style: none;
+  margin: auto;
+  max-width: 150px;
+}
+
+.movie {
+  display: block;
+  align-content: bottom;
+  background-color: grey;
+  border: transparent;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 120px;
+  margin: 20px auto;
+  max-height: 375px;
+}
+
+.movie h3 {
+  color: white;
+  text-align: center;
+  padding: .5rem .5rem 0;
+}
+
+.movie .title{
+  height: 75px;
+}
+
+.movie-cover {
+  height: 150px;
+}
+
+.movie img {
+  display: block;
+  width: 80%;
+  padding: 0 .5rem;
+  margin: auto;
+  max-height: 100%;
+}
+
+.fav-icon {
+  padding: 10px;
+  color: black;
+}
+
+.margin-adjust {
+  margin: 20px auto;
+}
+
+.is-fav .fav-icon {
+  color: yellow;
+}
+
+
+/* 
+.hide {
+  visibility: hidden;
+  opacity: 0;
+} */
+
+.show-more {
+  margin: 20px;
+  text-align: center;
+}
+
+.show-more button {
+  background-color: black;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 5px 10px;
+  outline: transparent;
+  border-radius: 20px;
+}
+
+.invisible {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 0px;
+}
