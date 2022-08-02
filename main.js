@@ -114,10 +114,17 @@ const testArray = [
 let arrayAZ = [];
 let arrayZA = [];
 
+const AZ = document.getElementById('AZ');
+const ZA = document.getElementById('ZA');
+
+let sortClicked = 0;
+
 const sort = async () => {
   try {
     arrayAZ.sort((a, b) => a.title.localeCompare(b.title));
-    arrayZA.sort((a, b) => a.title.localeCompare(b.title));
+    console.log(arrayAZ);
+    arrayZA.sort((a, b) => b.title.localeCompare(a.title));
+    console.log(arrayZA);
   } catch(err) {
     console.log(err);
   }
@@ -132,7 +139,6 @@ const createArrayFromFetch = async () => {
     // });
     pushToArray(actualArray, testArray);
     await buildMovies(actualArray);
-    addEventListeners();
   } catch(err) {
     console.log(err);
   }
@@ -152,18 +158,13 @@ function pushToArray(object, pusher) {
     arrayAZ.push(pusher[i]);
     arrayZA.push(pusher[i]);
   }
+  sort();
 }
 
-function clearHTML(arr) {
-  // console.log(arr);
-  // console.log(arr.length);
-  for (let i = 0; i < arr.length; i++) {
-    const movieCode = document.getElementById('movie');
-    if (movieCode.parentElement) {
-      movieCode.parentElement.remove();
-    } else {
-      break;
-    }
+function clearHTML() {
+  for (let i = 0; i < actualArray.length; i++) {
+    const movieCode = document.getElementById('listItem');
+    movieCode.remove();
   }
 }
 
@@ -172,6 +173,7 @@ const buildMovies = async (arr) => {
     for (let i = 0; i < arr.length; i++) {
       let movie = arr[i];
       const newListItem = document.createElement("li");
+      newListItem.setAttribute('id', 'listItem');
       newListItem.innerHTML = 
         `<div class="movie" id="movie">
           <h3>#${movie.rank}</h3>
@@ -186,6 +188,7 @@ const buildMovies = async (arr) => {
   } catch(err) {
     console.log(err);
   }
+  addEventListeners();
 }
 
 createArrayFromFetch();
@@ -193,20 +196,26 @@ createArrayFromFetch();
 function showMoreListener() {
   const showMore = document.getElementById('show-more');
   showMore.addEventListener('click', function() { 
-    clearHTML(actualArray);
+    clearHTML();
     increment += 5;
     pushToArray(actualArray, testArray);
     buildMovies(actualArray);
+    
+    const favBtn = document.querySelector('.favs-filter');
+    favBtn.classList.remove(active);
+    favBtn.removeEventListener('click', function(){
+    });
+    favListener();
   });
 }
 
 const isFav = 'is-fav';
-const favIcon = document.querySelectorAll('.fav-icon');
 
 function favIconListener() {
+  const favIcon = document.querySelectorAll('.fav-icon');
+  
   for (const icon of favIcon) {
     icon.addEventListener('click', function() {
-      console.log('clicked');
       if (this.parentElement.classList.contains(isFav)) {
         this.parentElement.classList.remove(isFav);
       } else {
@@ -216,10 +225,8 @@ function favIconListener() {
   }
 }
 
-const favBtn = document.querySelector('.favs-filter');
-const allMovies = document.querySelectorAll('.movie');
 const active = 'active';
-
+  
 function favActive(item) {
   if (item.classList.contains(active)){
     item.classList.remove(active);
@@ -229,8 +236,11 @@ function favActive(item) {
 }
 
 function favListener() {
+  const favBtn = document.querySelector('.favs-filter');
+  const allMovies = document.querySelectorAll('.movie');
+  
   favBtn.addEventListener('click', function() {
-    favActive(this);
+    favActive(favBtn);
     allMovies.forEach((item) => {
       if (!item.classList.contains(isFav) && favBtn.classList.contains(active)) {
         item.parentElement.classList.add('invisible');
@@ -246,32 +256,28 @@ function favListener() {
   })
 }
 
-const AZ = document.getElementById('AZ');
-const ZA = document.getElementById('ZA');
-
 function sortListeners() {
-  const sorts = [AZ, ZA];
+  const sortBtn = [AZ, ZA]; //these are the button objects, not the arrays
   let opposite;
+  let arrayInQuestion;
   for(let i = 0; i < 2; i++){
-    if(i = 0) {
+    if(i == 0) {
       opposite = 1;
+      arrayInQuestion = arrayAZ;
     } else {
       opposite = 0;
+      arrayInQuestion = arrayZA;
     }
-    sorts[i].addEventListener('click', function() {
-      if (sorts[i].classList.contains(active)) {
-        sorts[i].classList.remove(active);
-        clearHTML(`array${sorts[i]}`);
-        sort();
-        buildMovies(`array${sorts[i]}`);
+    sortBtn[i].addEventListener('click', function() {
+      if (sortBtn[i].classList.contains(active)) {
+        sortBtn[i].classList.remove(active);
+        clearHTML();
+        buildMovies(actualArray);
       } else {
-        sorts[opposite].classList.remove(active);
-        console.log(sorts[opposite]);
-        sorts[i].classList.add(active);
-        console.log(sorts[i]);
-        clearHTML(`array${sorts[i]}`);
-        sort();
-        buildMovies(`array${sorts[i]}`);
+        sortBtn[opposite].classList.remove(active);
+        sortBtn[i].classList.add(active);
+        clearHTML();
+        buildMovies(arrayInQuestion);
       }
     })
   }

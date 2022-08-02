@@ -28,7 +28,7 @@ header h2 {
 
 .favs-filter.active,
 .sort-btn.active {
-  color: red;
+  color: yellow;
 }
 
 .sort-container {
