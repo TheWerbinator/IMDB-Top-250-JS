@@ -117,76 +117,11 @@ let arrayZA = [];
 const AZ = document.getElementById('AZ');
 const ZA = document.getElementById('ZA');
 
-const movieDisplay = document.getElementById('movie-display');
-const movieDisplaySortAsc = document.getElementById('sort-asc');
-const movieDisplaySortDes = document.getElementById('sort-des');
-let counter = 0;
-let increment = 30;
-let trigger = 0;
-
 let sortClicked = 0;
 
-function sort(direction) {
-  // Declaring Variables
-  let i, run, li, stop;
-
-  run = true;
-
-  while (run) {
-    run = false;
-    li = movieDisplay.getElementsByTagName("LI");
-
-    for (i = 0; i < (li.length - 1); i++) {
-      stop = false;
-      if(direction === 0) {
-        if (li[i].find('div').find('.title').toLowerCase() > 
-        li[i + 1].find('div').find('.title').toLowerCase()) {
-            stop = true;
-            break;
-        }
-      } else {
-        if (li[i].find('div').find('.title').toLowerCase() > 
-        li[i + 1].find('div').find('.title').toLowerCase()) {
-            stop = true;
-            break;
-        }
-      }
-    }
-
-    if (stop) {
-        li[i].parentNode.insertBefore(
-                li[i + 1], li[i]);
-
-        run = true;
-    }
-  }
-}
-
-function unsort() {
-  let i, run, li, stop;
-
-  run = true;
-
-  while (run) {
-    run = false;
-    li = movieDisplay.getElementsByTagName("LI");
-
-    for (i = 0; i < (li.length - 1); i++) {
-      stop = false;
-      if (li[i].find('div').find('.title').toLowerCase() > 
-          li[i + 1].find('div').find('.title').toLowerCase()) {
-          stop = true;
-          break;
-      }
-    }
-
-    if (stop) {
-        li[i].parentNode.insertBefore(
-                li[i + 1], li[i]);
-
-        run = true;
-    }
-  }
+function sort() {
+    arrayAZ.sort((a, b) => a.title.localeCompare(b.title));
+    arrayZA.sort((a, b) => b.title.localeCompare(a.title));
 }
 
 const createArrayFromFetch = async () => {
@@ -197,11 +132,15 @@ const createArrayFromFetch = async () => {
     //   apiArray.push(element);
     // });
     pushToArray(actualArray, testArray);
-    await buildMovies(actualArray, movieDisplay);
+    await buildMovies(actualArray);
   } catch(err) {
     console.log(err);
   }
 }
+
+const movieDisplay = document.getElementById('movie-display');
+let counter = 0;
+let increment = 5;
 
 function pushToArray(object, pusher) {
   // console.log(increment);
@@ -216,9 +155,14 @@ function pushToArray(object, pusher) {
   sort();
 }
 
-const invisible = 'invisible';
+function clearHTML() {
+  for (let i = 0; i < actualArray.length; i++) {
+    const movieCode = document.getElementById('listItem');
+    movieCode.remove();
+  }
+}
 
-const buildMovies = async (arr, list) => {
+const buildMovies = async (arr) => {
   try {
     for (let i = 0; i < arr.length; i++) {
       let movie = arr[i];
@@ -233,35 +177,29 @@ const buildMovies = async (arr, list) => {
           </div>
           <div class="fav-icon"><i class="fa-solid fa-star"></i></div>
         </div>`;
-        list.appendChild(newListItem);
-        if(trigger===4) {
-          newListItem.classList.add(invisible);
-          trigger++;
-        }
+        movieDisplay.appendChild(newListItem);
     }
   } catch(err) {
     console.log(err);
   }
+  addEventListeners();
 }
 
 createArrayFromFetch();
-addEventListeners();
-
-let showMoreCounter = 5;
 
 function showMoreListener() {
   const showMore = document.getElementById('show-more');
-  showMore.addEventListener('click', function() {
+  showMore.addEventListener('click', function() { 
+    clearHTML();
+    increment += 5;
+    pushToArray(actualArray, testArray);
+    buildMovies(actualArray);
+    
     const favBtn = document.querySelector('.favs-filter');
     favBtn.classList.remove(active);
     favBtn.removeEventListener('click', function(){
     });
     favListener();
-    for (let i = 0; i < 5; i++) {
-      const listItem = document.querySelector(`#movieDisplay, :nth-child(${showMoreCounter})`);
-      listItem.classList.remove(invisible);
-      showMoreCounter++;
-    }
   });
 }
 
@@ -282,7 +220,7 @@ function favIconListener() {
 }
 
 const active = 'active';
-
+  
 function favActive(item) {
   if (item.classList.contains(active)){
     item.classList.remove(active);
@@ -315,28 +253,26 @@ function favListener() {
 function sortListeners() {
   const sortBtn = [AZ, ZA]; //these are the button objects, not the arrays
   let opposite;
-  let sortInQuestion;
+  let arrayInQuestion;
   for(let i = 0; i < 2; i++){
     if(i == 0) {
       opposite = 1;
-      sortInQuestion = 'asc';
+      arrayInQuestion = arrayAZ;
     } else {
       opposite = 0;
-      sortInQuestion = 'des';
+      arrayInQuestion = arrayZA;
     }
     sortBtn[i].addEventListener('click', function() {
       if (sortBtn[i].classList.contains(active)) {
         sortBtn[i].classList.remove(active);
-        unsort();
+        buildMovies(arrayInQuestion);
       } else {
         sortBtn[opposite].classList.remove(active);
         sortBtn[i].classList.add(active);
-        if(opposite = 0) {
-          sort(sortInQuestion);
-        } else {
-          sort(sortInQuestion);
-        }
+        buildMovies(arrayInQuestion);
       }
+      clearHTML();
+      // buildMovies(i === 0 ? arrayAZ : arrayZA);
     })
   }
 }
