@@ -173,8 +173,8 @@ function unsort() {
 
     for (i = 0; i < (li.length - 1); i++) {
       stop = false;
-      if (li[i].find('div').find('.title').toLowerCase() > 
-          li[i + 1].find('div').find('.title').toLowerCase()) {
+      if (li[i].find('div').find('.rank').toLowerCase() > 
+          li[i + 1].find('div').find('.rank').toLowerCase()) {
           stop = true;
           break;
       }
@@ -226,7 +226,7 @@ const buildMovies = async (arr, list) => {
       newListItem.setAttribute('id', 'listItem');
       newListItem.innerHTML = 
         `<div class="movie" id="movie">
-          <h3>#${movie.rank}</h3>
+          <h3 class="rank">#${movie.rank}</h3>
           <h3 class="title">${movie.fullTitle}</h3>
           <div class="movie-cover">
             <img src="${movie.image}" alt="Movie Cover Art">
