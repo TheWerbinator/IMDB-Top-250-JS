@@ -111,9 +111,6 @@ const testArray = [
   year: "1999"}
 ];
 
-let arrayAZ = [];
-let arrayZA = [];
-
 const AZ = document.getElementById('AZ');
 const ZA = document.getElementById('ZA');
 
@@ -121,12 +118,12 @@ const movieDisplay = document.getElementById('movie-display');
 const movieDisplaySortAsc = document.getElementById('sort-asc');
 const movieDisplaySortDes = document.getElementById('sort-des');
 let counter = 0;
-let increment = 30;
+let increment = 5;
 let trigger = 0;
 
 let sortClicked = 0;
 
-function sort(direction) {
+function sortAlphabetically(direction) {
   // Declaring Variables
   let i, run, li, stop;
 
@@ -162,7 +159,7 @@ function sort(direction) {
   }
 }
 
-function unsort() {
+function sortByRank() {
   let i, run, li, stop;
 
   run = true;
@@ -206,14 +203,9 @@ const createArrayFromFetch = async () => {
 function pushToArray(object, pusher) {
   // console.log(increment);
   object.length = 0;
-  arrayAZ.length = 0;
-  arrayZA.length = 0;
   for (let i = 0; i < increment; i++) {
     object.push(pusher[i]);
-    arrayAZ.push(pusher[i]);
-    arrayZA.push(pusher[i]);
   }
-  sort();
 }
 
 const invisible = 'invisible';
@@ -234,7 +226,7 @@ const buildMovies = async (arr, list) => {
           <div class="fav-icon"><i class="fa-solid fa-star"></i></div>
         </div>`;
         list.appendChild(newListItem);
-        if(trigger===4) {
+        if(trigger>5) {
           newListItem.classList.add(invisible);
           trigger++;
         }
@@ -252,24 +244,31 @@ let showMoreCounter = 5;
 function showMoreListener() {
   const showMore = document.getElementById('show-more');
   showMore.addEventListener('click', function() {
-    const favBtn = document.querySelector('.favs-filter');
-    favBtn.classList.remove(active);
-    favBtn.removeEventListener('click', function(){
-    });
-    favListener();
-    for (let i = 0; i < 5; i++) {
-      const listItem = document.querySelector(`#movieDisplay, :nth-child(${showMoreCounter})`);
-      listItem.classList.remove(invisible);
-      showMoreCounter++;
-    }
+    removeFavListener();
+    show5MoreMovies();
   });
+}
+
+function removeFavListener() {
+  const favBtn = document.querySelector('.favs-filter');
+  favBtn.classList.remove(active);
+  favBtn.removeEventListener('click', function(){
+  });
+  favListener();
+}
+
+function show5MoreMovies() {
+  for (let i = 0; i < 5; i++) {
+    const hiddenMovieLI = document.querySelector(`#movie-display :nth-child(${showMoreCounter})`);
+    hiddenMovieLI.classList.remove(invisible);
+    showMoreCounter++;
+  }
 }
 
 const isFav = 'is-fav';
 
 function favIconListener() {
   const favIcon = document.querySelectorAll('.fav-icon');
-  
   for (const icon of favIcon) {
     icon.addEventListener('click', function() {
       if (this.parentElement.classList.contains(isFav)) {
@@ -319,22 +318,22 @@ function sortListeners() {
   for(let i = 0; i < 2; i++){
     if(i == 0) {
       opposite = 1;
-      sortInQuestion = 'asc';
+      sortInQuestion = '0';
     } else {
       opposite = 0;
-      sortInQuestion = 'des';
+      sortInQuestion = '1';
     }
     sortBtn[i].addEventListener('click', function() {
       if (sortBtn[i].classList.contains(active)) {
         sortBtn[i].classList.remove(active);
-        unsort();
+        sortByRank();
       } else {
         sortBtn[opposite].classList.remove(active);
         sortBtn[i].classList.add(active);
         if(opposite = 0) {
-          sort(sortInQuestion);
+          sortAlphabetically(sortInQuestion);
         } else {
-          sort(sortInQuestion);
+          sortAlphabetically(sortInQuestion);
         }
       }
     })
