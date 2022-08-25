@@ -117,72 +117,36 @@ const ZA = document.getElementById('ZA');
 const movieDisplay = document.getElementById('movie-display');
 const movieDisplaySortAsc = document.getElementById('sort-asc');
 const movieDisplaySortDes = document.getElementById('sort-des');
+const favSortBtn = document.querySelector('.favs-filter');
 let counter = 0;
 let increment = 5;
 let trigger = 0;
 
+let showMoreCounter = 6;
 let sortClicked = 0;
 
-function sortAlphabetically(direction) {
-  // Declaring Variables
-  let i, run, li, stop;
+const ul = document.querySelector('ul')
+const lis = document.querySelectorAll('li')
 
-  run = true;
+function sortByRank(){
+  const list = document.querySelector("#movie-display");
 
-  while (run) {
-    run = false;
-    li = movieDisplay.getElementsByTagName("LI");
-
-    for (i = 0; i < (li.length - 1); i++) {
-      stop = false;
-      if(direction === 0) {
-        if (li[i].find('div').find('.title').toLowerCase() > 
-        li[i + 1].find('div').find('.title').toLowerCase()) {
-            stop = true;
-            break;
-        }
-      } else {
-        if (li[i].find('div').find('.title').toLowerCase() > 
-        li[i + 1].find('div').find('.title').toLowerCase()) {
-            stop = true;
-            break;
-        }
-      }
-    }
-
-    if (stop) {
-        li[i].parentNode.insertBefore(
-                li[i + 1], li[i]);
-
-        run = true;
-    }
-  }
+  [...list.children]
+    .sort((a, b) => (a.rank > b.rank ? 1 : -1))
+    .forEach((node) => list.appendChild(node));
 }
 
-function sortByRank() {
-  let i, run, li, stop;
+function sortAlphabetically(direction) {
+  const list = document.querySelector("#movie-display");
 
-  run = true;
-
-  while (run) {
-    run = false;
-    li = movieDisplay.getElementsByTagName("LI");
-
-    for (i = 0; i < (li.length - 1); i++) {
-      stop = false;
-      if (li[i].find('div').find('.rank').toLowerCase() > 
-          li[i + 1].find('div').find('.rank').toLowerCase()) {
-          stop = true;
-          break;
-      }
-    }
-
-    if (stop) {
-        li[i].parentNode.insertBefore(
-                li[i + 1], li[i]);
-
-        run = true;
-    }
+  if(direction === 0) {
+    [...list.children]
+      .sort((a, b) => (a.title > b.title ? 1 : -1))
+      .forEach((node) => list.appendChild(node));
+  } else {
+    [...list.children]
+      .sort((a, b) => (a.title < b.title ? 1 : -1))
+      .forEach((node) => list.appendChild(node));
   }
 }
 
@@ -203,7 +167,7 @@ const createArrayFromFetch = async () => {
 function pushToArray(object, pusher) {
   // console.log(increment);
   object.length = 0;
-  for (let i = 0; i < increment; i++) {
+  for (let i = 0; i < pusher.length; i++) {
     object.push(pusher[i]);
   }
 }
@@ -226,10 +190,10 @@ const buildMovies = async (arr, list) => {
           <div class="fav-icon"><i class="fa-solid fa-star"></i></div>
         </div>`;
         list.appendChild(newListItem);
-        if(trigger>5) {
+        if(trigger>4) {
           newListItem.classList.add(invisible);
-          trigger++;
         }
+        trigger++;
     }
   } catch(err) {
     console.log(err);
@@ -239,22 +203,14 @@ const buildMovies = async (arr, list) => {
 createArrayFromFetch();
 addEventListeners();
 
-let showMoreCounter = 5;
-
 function showMoreListener() {
   const showMore = document.getElementById('show-more');
   showMore.addEventListener('click', function() {
-    removeFavListener();
     show5MoreMovies();
+    if (showMoreCounter > 15) {
+      showMore.classList.add(invisible);
+    }
   });
-}
-
-function removeFavListener() {
-  const favBtn = document.querySelector('.favs-filter');
-  favBtn.classList.remove(active);
-  favBtn.removeEventListener('click', function(){
-  });
-  favListener();
 }
 
 function show5MoreMovies() {
@@ -282,7 +238,7 @@ function favIconListener() {
 
 const active = 'active';
 
-function favActive(item) {
+function favSortActive(item) {
   if (item.classList.contains(active)){
     item.classList.remove(active);
   } else {
@@ -290,21 +246,20 @@ function favActive(item) {
   }
 }
 
-function favListener() {
-  const favBtn = document.querySelector('.favs-filter');
+function favSortListener() {
   const allMovies = document.querySelectorAll('.movie');
   
-  favBtn.addEventListener('click', function() {
-    favActive(favBtn);
+  favSortBtn.addEventListener('click', function() {
+    favSortActive(favSortBtn);
     allMovies.forEach((item) => {
-      if (!item.classList.contains(isFav) && favBtn.classList.contains(active)) {
-        item.parentElement.classList.add('invisible');
+      if (!item.classList.contains(isFav) && favSortBtn.classList.contains(active)) {
+        item.parentElement.classList.add('favHidden');
         item.classList.remove('margin-adjust');
-      } else if (item.classList.contains(isFav) && favBtn.classList.contains(active)){
-        item.parentElement.classList.remove('invisible');
+      } else if (item.classList.contains(isFav) && favSortBtn.classList.contains(active)){
+        item.parentElement.classList.remove('favHidden');
         item.classList.add('margin-adjust');
       } else {
-        item.parentElement.classList.remove('invisible');
+        item.parentElement.classList.remove('favHidden');
         item.classList.remove('margin-adjust');
       }
     });
@@ -318,10 +273,10 @@ function sortListeners() {
   for(let i = 0; i < 2; i++){
     if(i == 0) {
       opposite = 1;
-      sortInQuestion = '0';
+      sortInQuestion = i;
     } else {
       opposite = 0;
-      sortInQuestion = '1';
+      sortInQuestion = i;
     }
     sortBtn[i].addEventListener('click', function() {
       if (sortBtn[i].classList.contains(active)) {
@@ -330,11 +285,7 @@ function sortListeners() {
       } else {
         sortBtn[opposite].classList.remove(active);
         sortBtn[i].classList.add(active);
-        if(opposite = 0) {
-          sortAlphabetically(sortInQuestion);
-        } else {
-          sortAlphabetically(sortInQuestion);
-        }
+        sortAlphabetically(sortInQuestion);
       }
     })
   }
@@ -342,7 +293,7 @@ function sortListeners() {
 
 function addEventListeners() {
   favIconListener();
-  favListener();
+  favSortListener();
   sortListeners();
   showMoreListener();
 }
