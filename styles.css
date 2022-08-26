@@ -1,11 +1,12 @@
 header h2 {
   text-align: center;
+  margin: auto;
 }
 
 .filter-container {
   display: flex;
   flex: space-between;
-  width: 95%;
+  max-width: 800px;
   margin: auto;
   align-content: center;
 }
@@ -51,18 +52,17 @@ header h2 {
 
 .movie-display {
   display: flex;
-  flex-wrap: wrap;
-  width: 800px;
+  flex-flow: row wrap;
+  max-width: 800px;
   margin: auto;
   padding: 0;
   justify-content: center;
 }
 
 .movie-display li {
-  flex: 1 1 20%;
   list-style: none;
   margin: auto;
-  max-width: 175px;
+  min-width: 150px;
 }
 
 .movie {
@@ -111,12 +111,6 @@ header h2 {
 .is-fav .fav-icon {
   color: yellow;
 }
-
-/* 
-.hide {
-  visibility: hidden;
-  opacity: 0;
-} */
 
 .show-more {
   margin: 20px;
