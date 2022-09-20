@@ -156,9 +156,8 @@ function favSortListener() {
 
 function sortListeners() {
   const sortBtn = [AZ, ZA];
-  let opposite;
-  for(let i = 0; i < 2; i++){
-    opposite = i === 0 ? 1 : 0;
+  for (let i = 0; i < 2; i++) {
+    let opposite = i === 0 ? 1 : 0;
     sortBtn[i].addEventListener('click', function() {
       if (sortBtn[i].classList.contains(active)) {
         sortBtn[i].classList.remove(active);
