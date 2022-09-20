@@ -27,8 +27,7 @@ header h2 {
   cursor: pointer;
 }
 
-.favs-filter.active,
-.sort-btn.active {
+.active {
   color: yellow;
 }
 
