@@ -1,0 +1,2 @@
+#ignore testing JS file
+original main.js

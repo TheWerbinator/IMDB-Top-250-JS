@@ -5,8 +5,6 @@ const AZ = document.getElementById('AZ');
 const ZA = document.getElementById('ZA');
 
 const movieDisplay = document.getElementById('movie-display');
-const movieDisplaySortAsc = document.getElementById('sort-asc');
-const movieDisplaySortDes = document.getElementById('sort-des');
 const favSortBtn = document.querySelector('.favs-filter');
 let counter = 0;
 let increment = 5;
@@ -27,14 +25,6 @@ function sortByRank(){
 
 function sortAlphabetically(direction) {
   const list = document.querySelector("#movie-display");
-
-  // const varA = a.children[0].children[1].innerText;
-  // const varB = b.children[0].children[1].innerText;
-  // const arrCompare = direction === 0 ? [varA, varB] : [varB, varA];
-
-  // [...list.children]
-  //   .sort((a, b) => (arrCompare[0] > arrCompare[1] ? 1 : -1))
-  //   .forEach((node) => list.appendChild(node));
 
   if(direction == 0) {
     [...list.children]
